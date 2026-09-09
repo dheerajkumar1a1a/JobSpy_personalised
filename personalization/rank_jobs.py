@@ -11,8 +11,6 @@ from typing import Any
 import pandas as pd
 import yaml
 
-WORD_RE = re.compile(r"[a-z0-9+#.]+", re.I)
-
 
 def norm(value: Any) -> str:
     if value is None:
@@ -27,6 +25,8 @@ def contains(text: str, term: str) -> bool:
     term = norm(term)
     if not term:
         return False
+    if len(term) <= 3 and re.fullmatch(r"[a-z0-9+#.]+", term):
+        return bool(re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", text))
     return term in text
 
 
@@ -111,12 +111,13 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
 
     skills = profile.get("skills", {}) or {}
     matched_skills = [term for term in skills if contains(text, term)]
-    # A posting matching roughly six high-weight skills is considered saturated;
-    # this prevents a 20-skill profile from making every good posting look weak.
+    # The profile contains many skills; saturate after roughly six weighted matches
+    # so broad but genuinely relevant postings are not penalized for profile breadth.
     matched_skill_weight = sum(float(skills[t]) for t in matched_skills)
     skill_match = skill_weight * min(1.0, matched_skill_weight / 6.0)
 
-    matched_domains = [d for d in (profile.get("project_terms") or []) if contains(text, d)]
+    project_terms = profile.get("project_evidence") or profile.get("project_terms") or []
+    matched_domains = [d for d in project_terms if contains(text, d)]
     domain_match = domain_weight * min(1.0, len(matched_domains) / 3.0)
 
     preferred_locations = [norm(x) for x in (profile.get("locations", {}) or {}).get("preferred", []) if norm(x)]
@@ -139,9 +140,9 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
     title_excluded = [x for x in exclusions if contains(title, x)]
     text_excluded = [x for x in negative_terms if contains(text, x)]
     if title_excluded:
-        raw_score *= 0.25
+        raw_score *= 0.20
     if text_excluded:
-        raw_score *= 0.35
+        raw_score *= 0.30
 
     score = max(0.0, min(100.0, raw_score))
 
@@ -150,13 +151,13 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
     if matched_targets:
         parts.append("target title: " + ", ".join(matched_targets[:2]))
     if matched_skills:
-        parts.append("skills: " + ", ".join(matched_skills[:5]))
+        parts.append("skills: " + ", ".join(matched_skills[:6]))
+    if matched_domains:
+        parts.append("project/domain evidence: " + ", ".join(matched_domains[:3]))
     if location_hit or remote_hit:
         parts.append("preferred location")
     if title_excluded:
         parts.append("title exclusion penalty")
-    if text_excluded:
-        parts.append("negative-term penalty")
     reason = "; ".join(parts) if parts else "limited evidence of profile fit"
 
     return RankedJob(
@@ -186,7 +187,7 @@ def rank_dataframe(df: pd.DataFrame, profile: dict[str, Any]) -> pd.DataFrame:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Rank a JobSpy CSV against a personal profile")
+    parser = argparse.ArgumentParser(description="Rank JobSpy results against a resume-backed personal profile")
     parser.add_argument("csv", help="Input CSV produced by JobSpy")
     parser.add_argument("--profile", default="personalization/profile.yaml")
     parser.add_argument("--output", default="out/ranked_jobs.csv")
