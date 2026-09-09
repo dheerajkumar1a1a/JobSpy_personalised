@@ -92,7 +92,6 @@ project_terms:
 exclude_title_patterns:
   - senior
   - sr.
-  - sr
   - lead
   - staff
   - principal
