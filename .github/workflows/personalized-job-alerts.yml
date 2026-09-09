@@ -1,0 +1,59 @@
+name: Personalized Job Alerts
+
+on:
+  schedule:
+    # 06:30 IST (01:00 UTC), daily.
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: personalized-job-alerts
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Restore Telegram dedupe state
+        uses: actions/cache@v4
+        with:
+          path: out/telegram_seen.txt
+          key: jobspy-personalized-telegram-${{ github.run_id }}
+          restore-keys: |
+            jobspy-personalized-telegram-
+
+      - name: Run personalized search and ranking
+        env:
+          JOBSPY_PROXIES: ${{ secrets.JOBSPY_PROXIES }}
+        run: |
+          python personalization/run_alerts.py
+
+      - name: Send Telegram alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python personalization/telegram_alert.py out/ranked_jobs.csv --top 10
+
+      - name: Upload ranked results
+        uses: actions/upload-artifact@v4
+        with:
+          name: personalized-job-results-${{ github.run_number }}
+          path: out/*.csv
+          retention-days: 14
+          if-no-files-found: ignore
