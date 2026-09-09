@@ -1,8 +1,44 @@
-# Personal job-search profile for Dheeraj Kumar.
-# Seeded from public project evidence available in the account context. Replace
-# uncertain facts with your resume-derived profile before using seniority rules.
+# Resume-backed job-search profile for Dheeraj Kumar.
+# Source: CV2.pdf supplied to this conversation on 2026-09-09.
+# This file intentionally stores structured resume facts rather than the PDF itself,
+# so the public repository does not contain the original resume document.
 name: Dheeraj Kumar
 profile_version: 2
+source: CV2.pdf
+
+education:
+  - degree: M.Tech. in Food Process Engineering
+    program: B.Tech.(Hons.) in Agricultural and Food Engineering + M.Tech. Dual Degree (5Y)
+    institute: IIT Kharagpur
+    completion_year: 2026
+    cgpa: 9.16
+  - exam: CBSE
+    institute: Pt. Deen Dayal Upadhyaya Sanatan Dharma Vidyalaya
+    year: 2021
+    marks_percent: 97.6
+  - exam: CBSE
+    institute: Pt. Deen Dayal Upadhyaya Sanatan Dharma Vidyalaya
+    year: 2019
+    marks_percent: 95.4
+
+career_profile:
+  level: early_career
+  strongest_domains:
+    - data science
+    - data analysis
+    - machine learning
+    - computer vision
+    - NLP
+    - image processing
+    - time-series forecasting
+    - applied AI
+    - scientific/engineering analytics
+  experience_signal:
+    - Computer Vision Intern
+    - Data Analysis Intern
+    - Machine Learning Intern
+    - BTP / academic ML projects
+    - applied research projects
 
 locations:
   preferred:
@@ -22,76 +58,201 @@ work_preferences:
   onsite_ok: true
   internships: false
   contract_roles: false
+  preferred_seniority:
+    - entry
+    - junior
+    - associate
+    - early-career
 
+# Search families are deliberately grounded in the actual CV.
 target_titles:
   primary:
     - Data Scientist
-    - Data Analyst
     - Data Science Analyst
+    - Data Analyst
     - Machine Learning Engineer
+    - ML Engineer
+    - AI Engineer
     - AI/ML Engineer
     - Applied AI Engineer
     - Computer Vision Engineer
-    - AI Automation Engineer
+    - Computer Vision Developer
+    - NLP Engineer
+    - Machine Learning Analyst
     - Research Engineer
     - Research Analyst
+    - Data & AI Analyst
   secondary:
     - Python Developer
     - Automation Engineer
     - ML Developer
-    - Computer Vision Developer
+    - AI Developer
+    - Image Processing Engineer
+    - Data Engineer
     - Analytics Engineer
+    - Business/Data Analyst
 
 skills:
   Python: 1.0
-  pandas: 0.9
-  numpy: 0.9
-  scikit-learn: 0.9
-  SQL: 0.8
-  data analysis: 1.0
-  data science: 1.0
-  statistical analysis: 0.9
-  machine learning: 1.0
-  computer vision: 1.0
+  MATLAB: 1.0
+  SIMULINK: 1.0
+  C/C++: 0.8
+  NumPy: 0.9
+  Pandas: 1.0
+  Matplotlib: 0.9
+  Seaborn: 0.7
+  Plotly: 0.7
+  Scikit-learn: 1.0
   OpenCV: 1.0
-  YOLO: 1.0
-  object detection: 1.0
-  object tracking: 0.9
-  image processing: 0.9
-  time series: 0.9
+  TensorFlow: 0.8
+  Keras: 0.8
+  SQL: 0.7
+  BigQuery: 0.7
+  Jupyter Notebook: 0.7
+  Google Colab: 0.7
+  Image Processing: 1.0
+  Computer Vision: 1.0
+  Robotics: 0.8
+  Inverse Kinematics: 0.8
+  PyQt5: 0.8
+  SSH: 0.6
+  Android: 0.5
+  Viterbi Algorithm: 0.8
+  NLP: 1.0
+  Word2Vec: 0.9
+  NLTK: 0.7
+  ANN: 0.9
+  RNN: 0.9
+  GRU: 0.9
+  LSTM: 0.9
+  Bidirectional LSTM: 0.9
+  BERT: 1.0
+  Natural Language Processing: 1.0
+  Sentiment Analysis: 0.8
+  Text Classification: 0.8
+  Linear Regression: 0.8
+  Random Forest: 0.9
+  Prophet: 0.9
+  time series: 1.0
   forecasting: 1.0
-  LLM: 0.9
-  generative AI: 0.9
-  AI automation: 1.0
-  chatbots: 0.8
-  GitHub Actions: 0.7
-  Ollama: 0.6
-  research: 0.8
-  analytics: 0.8
+  statistical analysis: 0.9
+  data cleaning: 1.0
+  data preprocessing: 1.0
+  data visualization: 1.0
+  feature engineering: 0.8
 
-project_terms:
-  - retail price forecasting
-  - time series forecasting
-  - tomato price analysis
-  - potato price forecasting
-  - YOLO
-  - vehicle counting
-  - object detection
-  - object tracking
-  - pose detection
-  - computer vision
-  - multimodal chatbot
-  - chat with images
-  - LLM applications
-  - AI automation
-  - portfolio automation
-  - Cloudflare Workers
-  - GitHub Actions
-  - algorithmic trading
+project_evidence:
+  - durian dehusking computer vision and robotics
+  - real-time durian center localization
+  - camera intrinsic calibration
+  - pinhole camera model
+  - inverse kinematics
+  - robotic arm integration
+  - onion color parameter estimation
+  - RGB / L*a*b* color analysis
+  - SIMULINK and MATLAB Android application
+  - temperature data analysis and visualization
+  - thermocouple data processing
+  - timestamp parsing and time-series analysis
+  - hateful speech classification
+  - ANN
+  - SimpleRNN
+  - GRU
+  - LSTM
+  - Bidirectional LSTM
+  - BERT
+  - Word2Vec
+  - POS tagging
+  - Viterbi algorithm
+  - sentiment analysis
+  - supply chain optimisation
+  - Linear Regression
+  - ColumnTransformer
+  - RandomForest Regressor
+  - speciality crop spot price forecasting
+  - rainfall time-series conversion
+  - Prophet multivariate forecasting
+  - augmented Dickey-Fuller test
+  - Kaggle disaster tweets
+
+quantified_evidence:
+  - "Durian localization error: 1.5 cm in high light and 1.3 cm in optimal light"
+  - "Onion color-app validation: R2 >= 0.94 across 10 samples"
+  - "Onion pungency-related validation: R2 >= 0.99 across parameters"
+  - "Bidirectional LSTM F1: 0.6533 on 19k+ comments"
+  - "POS tagger F1: 0.88 on first 3 Treebank test sentences"
+  - "Sentiment F1: 0.83 untagged and 0.84 POS-tagged"
+  - "Supply-chain Linear Regression MAPE: 0.0528"
+  - "Supply-chain final RandomForest MAPE: 0.0494"
+  - "Spot-pricing forecasting MAPE refinement: 42.94%"
+  - "Spot-pricing forecasting overall MAPE cutback: 17.03%"
+  - "Kaggle disaster tweets: rank 127/600 with F1 0.83205"
+
+experience_evidence:
+  - role: Computer Vision Intern
+    organization: Maejo University
+    period: May 2025-June 2025
+    focus:
+      - image processing
+      - robotics
+      - camera calibration
+      - PyQt5
+      - inverse kinematics
+  - role: Data Analysis Intern
+    organization: Purdue University, USA
+    period: June 2024-July 2024
+    focus:
+      - MATLAB
+      - data parsing
+      - datetime conversion
+      - time-series analysis
+      - visualization
+  - role: Machine Learning Intern
+    organization: San Jose State University, USA
+    period: May 2023-June 2023
+    focus:
+      - forecasting
+      - Prophet
+      - pandas
+      - time-series preprocessing
+      - climate and macroeconomic features
+  - role: BTP-2
+    organization: IIT Kharagpur
+    period: January 2025-April 2025
+    focus:
+      - image processing
+      - MATLAB
+      - SIMULINK
+      - color science
+
+scholarships_and_achievements:
+  - "2024 Khorana Scholarship; one of 75 recipients in India"
+  - "2025 Guru Krupa Foundation Scholarship; one of 25 recipients in IIT Kharagpur"
+  - "Highest CGPA among 3rd years; 9.8+/10 SGPA in two consecutive semesters"
+  - "9.44/10 at end of Spring 2024"
+  - "JEE Mains 2021: 99.52 percentile"
+  - "JEE Advanced 2021: 94.53 percentile"
+
+coursework:
+  mathematics:
+    - Probability and Statistics
+    - Linear Algebra
+    - Advanced Calculus
+    - Numerical and Complex Analysis
+    - Theory of Partial Differential Equations
+  technical:
+    - Programming and Data Structures
+    - Basic Electronics
+  domain:
+    - Food Process Modelling
+    - Introduction to Quality
+    - Food Quality and Safety Standards
+    - Advanced Mechanical & Thermal Operations in Food Processing
 
 exclude_title_patterns:
   - senior
   - sr.
+  - sr
   - lead
   - staff
   - principal
@@ -109,7 +270,8 @@ exclude_title_patterns:
   - recruiter
   - recruitment
   - customer success
-  - support
+  - customer support
+  - support engineer
 
 exclude_terms:
   - telecaller
@@ -118,6 +280,8 @@ exclude_terms:
   - business development executive
   - recruitment consultant
   - customer support
+  - voice process
+  - non voice process
 
 scoring:
   minimum_alert_score: 72
@@ -128,26 +292,3 @@ scoring:
   domain_weight: 10
   location_weight: 10
   freshness_weight: 5
-
-jobspy:
-  sites:
-    - linkedin
-    - naukri
-    - indeed
-    - glassdoor
-    - google
-    - zip_recruiter
-    - bayt
-    - bdjobs
-  search_terms:
-    - data scientist
-    - data analyst
-    - machine learning engineer
-    - computer vision engineer
-    - AI ML engineer
-    - AI automation engineer
-    - research analyst
-    - Python developer
-  results_wanted: 12
-  hours_old: 168
-  country_indeed: India
