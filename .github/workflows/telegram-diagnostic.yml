@@ -1,0 +1,78 @@
+name: Telegram diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  telegram-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate required secrets
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          test -n "$TELEGRAM_BOT_TOKEN" || { echo '::error::TELEGRAM_BOT_TOKEN is missing'; exit 1; }
+          test -n "$TELEGRAM_CHAT_ID" || { echo '::error::TELEGRAM_CHAT_ID is missing'; exit 1; }
+          echo 'Telegram secrets are present.'
+
+      - name: Check bot token with getMe
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error \
+            --get "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe")"
+          python - "$response" <<'PY'
+          import json, sys
+          data = json.loads(sys.argv[1])
+          if not data.get('ok'):
+              raise SystemExit(f"Telegram getMe failed: {data}")
+          bot = data.get('result', {})
+          print(f"Bot token valid. Bot username: @{bot.get('username', 'unknown')}")
+          PY
+
+      - name: Check target chat with getChat
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error \
+            --get "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}")"
+          python - "$response" <<'PY'
+          import json, sys
+          data = json.loads(sys.argv[1])
+          if not data.get('ok'):
+              raise SystemExit(f"Telegram getChat failed: {data}")
+          chat = data.get('result', {})
+          label = chat.get('title') or chat.get('username') or chat.get('first_name') or str(chat.get('id'))
+          print(f"Target chat reachable: {label}")
+          PY
+
+      - name: Send diagnostic message
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          timestamp="$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          text="✅ JobSpy_personalised Telegram diagnostic passed\n\nGitHub Actions can reach your Telegram bot and target chat.\nUTC: ${timestamp}\n\nResume integration is intentionally NOT enabled yet."
+          response="$(curl --fail --silent --show-error \
+            --get "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode 'parse_mode=HTML' \
+            --data-urlencode "text=${text}")"
+          python - "$response" <<'PY'
+          import json, sys
+          data = json.loads(sys.argv[1])
+          if not data.get('ok'):
+              raise SystemExit(f"Telegram sendMessage failed: {data}")
+          print(f"Diagnostic message sent. Telegram message id: {data['result']['message_id']}")
+          PY
