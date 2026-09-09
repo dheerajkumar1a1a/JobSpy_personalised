@@ -27,7 +27,6 @@ def contains(text: str, term: str) -> bool:
     term = norm(term)
     if not term:
         return False
-    # Phrase/technology aware matching; punctuation variants are normalized.
     return term in text
 
 
@@ -111,12 +110,12 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
         title_match = 0.0
 
     skills = profile.get("skills", {}) or {}
-    matched_skills = [term for term, weight in skills.items() if contains(text, term)]
-    total_skill_weight = sum(float(v) for v in skills.values()) or 1.0
+    matched_skills = [term for term in skills if contains(text, term)]
+    # A posting matching roughly six high-weight skills is considered saturated;
+    # this prevents a 20-skill profile from making every good posting look weak.
     matched_skill_weight = sum(float(skills[t]) for t in matched_skills)
-    skill_match = skill_weight * min(1.0, matched_skill_weight / total_skill_weight)
+    skill_match = skill_weight * min(1.0, matched_skill_weight / 6.0)
 
-    project_text = " ".join(norm(x) for x in (profile.get("project_terms") or []))
     matched_domains = [d for d in (profile.get("project_terms") or []) if contains(text, d)]
     domain_match = domain_weight * min(1.0, len(matched_domains) / 3.0)
 
@@ -127,12 +126,10 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
     location_match = location_weight if (location_hit or remote_hit) else 0.0
 
     posted = parse_date(row.get("date_posted"))
-    freshness = 0.0
     if posted:
         age_days = max(0.0, (now - posted).total_seconds() / 86400.0)
         freshness = freshness_weight * max(0.0, 1.0 - min(age_days / 14.0, 1.0))
     else:
-        # Unknown date: don't reward, but don't automatically reject.
         freshness = freshness_weight * 0.25
 
     raw_score = title_match + skill_match + domain_match + location_match + freshness
@@ -158,6 +155,8 @@ def rank_row(row: pd.Series, profile: dict[str, Any], now: datetime | None = Non
         parts.append("preferred location")
     if title_excluded:
         parts.append("title exclusion penalty")
+    if text_excluded:
+        parts.append("negative-term penalty")
     reason = "; ".join(parts) if parts else "limited evidence of profile fit"
 
     return RankedJob(
