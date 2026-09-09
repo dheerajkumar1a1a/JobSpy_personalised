@@ -1,9 +1,8 @@
 # Personal job-search profile for Dheeraj Kumar.
-# This seed is based on public project evidence already available in the
-# account/repository context. Replace values with your resume-derived facts
-# before relying on seniority/experience matching.
+# Seeded from public project evidence available in the account context. Replace
+# uncertain facts with your resume-derived profile before using seniority rules.
 name: Dheeraj Kumar
-profile_version: 1
+profile_version: 2
 
 locations:
   preferred:
@@ -24,7 +23,6 @@ work_preferences:
   internships: false
   contract_roles: false
 
-# Strongest target families first.
 target_titles:
   primary:
     - Data Scientist
@@ -44,12 +42,12 @@ target_titles:
     - Computer Vision Developer
     - Analytics Engineer
 
-# Terms are weighted; higher = stronger evidence of fit.
 skills:
   Python: 1.0
   pandas: 0.9
   numpy: 0.9
   scikit-learn: 0.9
+  SQL: 0.8
   data analysis: 1.0
   data science: 1.0
   statistical analysis: 0.9
@@ -68,11 +66,9 @@ skills:
   chatbots: 0.8
   GitHub Actions: 0.7
   Ollama: 0.6
-  SQL: 0.8
   research: 0.8
   analytics: 0.8
 
-# Evidence from projects. Used to improve semantic keyword matching and alert reasons.
 project_terms:
   - retail price forecasting
   - time series forecasting
@@ -93,7 +89,6 @@ project_terms:
   - GitHub Actions
   - algorithmic trading
 
-# Roles/terms to reject even when a generic keyword matches.
 exclude_title_patterns:
   - senior
   - sr.
@@ -117,7 +112,6 @@ exclude_title_patterns:
   - customer success
   - support
 
-# Explicit hard negatives in the title/description.
 exclude_terms:
   - telecaller
   - field sales
@@ -135,3 +129,26 @@ scoring:
   domain_weight: 10
   location_weight: 10
   freshness_weight: 5
+
+jobspy:
+  sites:
+    - linkedin
+    - naukri
+    - indeed
+    - glassdoor
+    - google
+    - zip_recruiter
+    - bayt
+    - bdjobs
+  search_terms:
+    - data scientist
+    - data analyst
+    - machine learning engineer
+    - computer vision engineer
+    - AI ML engineer
+    - AI automation engineer
+    - research analyst
+    - Python developer
+  results_wanted: 12
+  hours_old: 168
+  country_indeed: India
