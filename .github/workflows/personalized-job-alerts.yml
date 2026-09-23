@@ -2,8 +2,8 @@ name: Personalized Job Alerts
 
 on:
   schedule:
-    # 11:30 IST (06:00 UTC), daily.
-    - cron: "0 6 * * *"
+    # 14:00 IST (08:30 UTC), every Thursday.
+    - cron: "30 8 * * 4"
   workflow_dispatch:
 
 concurrency:
